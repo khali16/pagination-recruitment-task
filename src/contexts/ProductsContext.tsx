@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  ChangeEvent,
   FunctionComponent,
   PropsWithChildren,
   createContext,
-  useState,
 } from "react";
-import { ConsumerFunction, ProductsList, SingleProduct } from "../models";
+import { ConsumerFunction, ProductsList, SingleProduct } from "../types/models";
 import { useDebounce } from "../hooks/useDebounce";
+import { useSearchParams } from "react-router-dom";
 
 interface ProductsContext {
   filterId: string;
   changeFilterId: ConsumerFunction<string>;
+  changePage: (event: ChangeEvent<unknown>, value: number) => void;
   data?: SingleProduct | ProductsList;
   isFetching: boolean;
   isError: boolean;
@@ -21,12 +23,10 @@ export const ProductsContext = createContext<ProductsContext | undefined>(
 );
 
 const fetchData = async (
-  filterId: string
+  params: string
 ): Promise<SingleProduct | ProductsList> => {
   const response = await fetch(
-    !!filterId
-      ? `https://reqres.in/api/products?per_page=5&id=${filterId}`
-      : "https://reqres.in/api/products?per_page=5"
+    `https://reqres.in/api/products?per_page=5&${params}`
   );
   if (!response.ok) {
     throw new Error(response.statusText);
@@ -37,25 +37,37 @@ const fetchData = async (
 export const ProductsProvider: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
-  const [filterId, setFilterId] = useState("");
+  let [searchParams, setSearchParams] = useSearchParams();
+  const filterId = searchParams.get("id") || "";
+  const page = searchParams.get("page");
   const debouncedFilterId = useDebounce(filterId, 500);
 
   const { data, isError, isFetching } = useQuery<SingleProduct | ProductsList>({
-    queryKey: ["productsData", debouncedFilterId],
-    queryFn: () => fetchData(debouncedFilterId),
+    queryKey: ["productsData", debouncedFilterId, page],
+    queryFn: () => fetchData(searchParams.toString()),
   });
 
   const changeFilterId = (value: string) => {
     if (!!parseInt(value)) {
-      setFilterId(value);
+      setSearchParams({ id: value });
     } else {
-      setFilterId("");
+      setSearchParams({});
     }
   };
 
+  const changePage = (_: ChangeEvent<unknown>, value: number) =>
+    setSearchParams({ page: value.toString() });
+
   return (
     <ProductsContext.Provider
-      value={{ filterId, changeFilterId, data, isError, isFetching }}
+      value={{
+        filterId,
+        changeFilterId,
+        changePage,
+        data,
+        isError,
+        isFetching,
+      }}
     >
       {children}
     </ProductsContext.Provider>

@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@mui/material";
 import { FunctionComponent, useState } from "react";
-import { Product } from "../../models";
-import ProductDetailsModal from "../ProductDetailsModal";
+import { Product } from "../../types/models";
+import ProductDetailsModal from "../ProductDetailsModal/ProductDetailsModal";
 
 const ProductCard: FunctionComponent<Product> = (props) => {
   const { id, name, year, color } = props;

@@ -1,5 +1,6 @@
 import {
   Box,
+  IconButton,
   List,
   ListItem,
   ListItemText,
@@ -7,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { FunctionComponent } from "react";
-import { Product } from "../../models";
+import { Product } from "../../types/models";
 import { formatUnderscoredText } from "../../utils/stringUtils";
 
 interface Props extends Product {
@@ -44,11 +45,24 @@ const ProductDetailsModal: FunctionComponent<Props> = ({
       onClose={toggleDetailsModal}
       aria-labelledby="product-details-modal"
       aria-describedby="shows-product-details"
+      data-testid="product-details-modal"
     >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Product details
         </Typography>
+        <IconButton
+          aria-label="close"
+          onClick={toggleDetailsModal}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          X
+        </IconButton>
         <List>
           {Object.keys(details).map((key) => (
             <ListItem key={key}>
