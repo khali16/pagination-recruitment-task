@@ -1,18 +1,18 @@
 import { Pagination, Stack } from "@mui/material";
 import { FunctionComponent } from "react";
-import { useProductsContext } from "../../hooks/useProductsContext";
+import { ChangePage } from "../../types/models";
 
 interface Props {
   page: number;
   total_pages: number;
+  changePage: ChangePage;
 }
 
 const ProductsPagination: FunctionComponent<Props> = ({
   page,
   total_pages,
+  changePage,
 }) => {
-  const { changePage } = useProductsContext();
-
   return (
     <Stack spacing={2}>
       <Pagination

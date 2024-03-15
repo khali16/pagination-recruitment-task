@@ -1,15 +1,18 @@
 import { TextField } from "@mui/material";
 import { FunctionComponent } from "react";
-import { useProductsContext } from "../../hooks/useProductsContext";
+import { ConsumerFunction } from "../../types/models";
 
-const FilterInput: FunctionComponent = () => {
-  const { changeFilterId, filterId } = useProductsContext();
+interface Props {
+  onChange: ConsumerFunction<string>;
+  filterId: string;
+}
 
+const FilterInput: FunctionComponent<Props> = ({ filterId, onChange }) => {
   return (
     <TextField
       placeholder="Filter items by id"
       type="number"
-      onChange={({ target }) => changeFilterId(target.value)}
+      onChange={({ target }) => onChange(target.value)}
       value={filterId}
     />
   );

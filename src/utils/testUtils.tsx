@@ -1,6 +1,6 @@
 import { FunctionComponent, PropsWithChildren, ReactElement } from "react";
 import { RenderOptions, render } from "@testing-library/react";
-import { ProductsContext } from "../contexts/ProductsContext";
+import { PageControlContextState } from "../contexts/PageControlContext";
 
 const AllTheProviders: FunctionComponent<PropsWithChildren> = ({
   children,
