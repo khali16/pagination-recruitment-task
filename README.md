@@ -2,6 +2,9 @@
 
 # Tech: React + TypeScript + Vite
 
+# Project structure
+Due to a small size of the app, I used package-by-layer approach
+
 # Plans to improve the project:
 
 - MSW (Mock service worker) to allow dev profile with local mocks
