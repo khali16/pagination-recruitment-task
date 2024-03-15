@@ -13,29 +13,23 @@ interface Props {
   changePage: ChangePage;
 }
 
-const ProductsSection: FunctionComponent<Props> = ({
-  products,
-  changePage,
-}) => (
-  <>
-    {"total_pages" in products ? (
-      <>
-        <ProductList.Root>
-          <ProductList.MultipleProducts products={products.data} />
-        </ProductList.Root>
-        <ProductList.Navigation
-          page={products.page}
-          total_pages={products.total_pages}
-          changePage={changePage}
-        />
-      </>
-    ) : (
+const ProductsSection: FunctionComponent<Props> = ({ products, changePage }) =>
+  "total_pages" in products ? (
+    <>
       <ProductList.Root>
-        <ProductList.SingleProduct product={products.data} />
+        <ProductList.MultipleProducts products={products.data} />
       </ProductList.Root>
-    )}
-  </>
-);
+      <ProductList.Navigation
+        page={products.page}
+        total_pages={products.total_pages}
+        changePage={changePage}
+      />
+    </>
+  ) : (
+    <ProductList.Root>
+      <ProductList.SingleProduct product={products.data} />
+    </ProductList.Root>
+  );
 
 const withPropsProvider =
   (Component: FunctionComponent<Props>): FunctionComponent =>
