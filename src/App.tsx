@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { FunctionComponent } from "react";
 import { ErrorBoundary } from "react-error-boundary";
