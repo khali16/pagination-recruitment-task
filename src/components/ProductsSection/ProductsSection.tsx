@@ -1,31 +1,58 @@
-import { useProductsContext } from "../../hooks/useProductsContext";
+import { useDebouncedQuery } from "../../hooks/useDebouncedQuery";
+import { usePageControlContext } from "../../hooks/usePageControlContext";
+import {
+  ChangePage,
+  MultipleProductDTO,
+  SingleProductDTO,
+} from "../../types/models";
 import { ProductList } from "../ProductList/ProductList";
 import { FunctionComponent } from "react";
 
-const ProductsSection: FunctionComponent = () => {
-  const { data } = useProductsContext();
+interface Props {
+  products: SingleProductDTO | MultipleProductDTO;
+  changePage: ChangePage;
+}
 
-  if (data) {
-    if ("total_pages" in data) {
-      return (
-        <>
-          <ProductList.Root>
-            <ProductList.MultipleProducts products={data.data} />
-          </ProductList.Root>
-          <ProductList.Pagination
-            page={data.page}
-            total_pages={data.total_pages}
-          />
-        </>
-      );
-    } else {
-      return (
+const ProductsSection: FunctionComponent<Props> = ({
+  products,
+  changePage,
+}) => (
+  <>
+    {"total_pages" in products ? (
+      <>
         <ProductList.Root>
-          <ProductList.SingleProduct product={data.data} />
+          <ProductList.MultipleProducts products={products.data} />
         </ProductList.Root>
-      );
-    }
-  }
-};
+        <ProductList.Navigation
+          page={products.page}
+          total_pages={products.total_pages}
+          changePage={changePage}
+        />
+      </>
+    ) : (
+      <ProductList.Root>
+        <ProductList.SingleProduct product={products.data} />
+      </ProductList.Root>
+    )}
+  </>
+);
 
-export default ProductsSection;
+const withPropsProvider =
+  (Component: FunctionComponent<Props>): FunctionComponent =>
+  () => {
+    const { filterId, page, searchParams, changePage } =
+      usePageControlContext();
+    const { products } = useDebouncedQuery(
+      filterId,
+      page,
+      searchParams.toString()
+    );
+
+    if (products) {
+      return <Component products={products} changePage={changePage} />;
+    } else {
+      throw new TypeError("Expected products in ProductSection to be defined.");
+    }
+  };
+
+export default withPropsProvider(ProductsSection);

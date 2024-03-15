@@ -1,23 +1,22 @@
 import { FunctionComponent, PropsWithChildren, ReactElement } from "react";
 import { RenderOptions, render } from "@testing-library/react";
-import { ProductsContext } from "../contexts/ProductsContext";
+import { PageControlContext } from "../contexts/PageControlContext";
 
 const AllTheProviders: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
   return (
-    <ProductsContext.Provider
+    <PageControlContext.Provider
       value={{
         changeFilterId: vi.fn(),
         changePage: vi.fn(),
         filterId: "3",
-        isError: false,
-        isFetching: false,
-        data: undefined,
+        page: "1",
+        searchParams: "id=3&page=1",
       }}
     >
       {children}
-    </ProductsContext.Provider>
+    </PageControlContext.Provider>
   );
 };
 

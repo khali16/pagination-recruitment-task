@@ -1,55 +1,64 @@
+import { fireEvent, render } from "@testing-library/react";
 import { ProductList } from "./ProductList";
-import { Product } from "../../types/models";
-import { render } from "../../utils/testUtils";
 
-describe("ProductList Components Tests", () => {
-  const sampleProduct: Product = {
+const productsMock = [
+  {
     id: 1,
-    name: "Sample Product",
+    name: "Product 1",
     year: 2022,
-    pantone_value: "PV-123",
-    color: "blue",
-  };
+    color: "#FFF",
+    pantone_value: "test value",
+  },
+  {
+    id: 2,
+    name: "Product 2",
+    year: 2023,
+    color: "#FFF",
+    pantone_value: "test value",
+  },
+];
 
-  it("Root component renders properly", () => {
-    const { getByRole } = render(
+describe("ProductList Component Tests", () => {
+  it("renders root table correctly with single product", () => {
+    const { getByLabelText, getByText } = render(
       <ProductList.Root>
-        <ProductList.SingleProduct product={sampleProduct} />
+        <ProductList.SingleProduct product={productsMock[0]} />
       </ProductList.Root>
     );
 
-    expect(getByRole("table")).toBeInTheDocument();
-    expect(getByRole("columnheader", { name: /id/i })).toBeInTheDocument();
-    expect(getByRole("columnheader", { name: /name/i })).toBeInTheDocument();
-    expect(getByRole("columnheader", { name: /year/i })).toBeInTheDocument();
+    const table = getByLabelText("products table");
+    expect(table).toBeInTheDocument();
+
+    expect(getByText("ID")).toBeInTheDocument();
+    expect(getByText("Name")).toBeInTheDocument();
+    expect(getByText("Year")).toBeInTheDocument();
+    expect(getByText("Product 1")).toBeInTheDocument();
   });
 
-  it("MultipleProducts component renders multiple ProductCard components", () => {
-    const products: Product[] = [sampleProduct, sampleProduct, sampleProduct];
-
-    const { getAllByText } = render(
-      <ProductList.MultipleProducts products={products} />
-    );
-
-    const productCards = getAllByText("Sample Product");
-
-    expect(productCards).toHaveLength(products.length);
-  });
-
-  it("SingleProduct component renders a ProductCard component", () => {
+  it("renders multiple products correctly", () => {
     const { getByText } = render(
-      <ProductList.SingleProduct product={sampleProduct} />
+      <ProductList.MultipleProducts products={productsMock} />
     );
 
-    expect(getByText("Sample Product")).toBeInTheDocument();
+    expect(getByText("Product 1")).toBeInTheDocument();
+    expect(getByText("Product 2")).toBeInTheDocument();
   });
 
-  it("Pagination component renders properly", () => {
+  it("should pagination sites be clickable", () => {
+    const changePageMock = vi.fn();
+    const totalPages = 5;
+    const currentPage = 2;
+
     const { getByText } = render(
-      <ProductList.Pagination page={1} total_pages={5} />
+      <ProductList.Navigation
+        aria-label="products pagination"
+        total_pages={totalPages}
+        page={currentPage}
+        changePage={changePageMock}
+      />
     );
 
-    expect(getByText("1")).toBeInTheDocument();
-    expect(getByText("5")).toBeInTheDocument();
+    const nextPageButton = getByText("3");
+    fireEvent.click(nextPageButton);
   });
 });

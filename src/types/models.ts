@@ -1,5 +1,8 @@
+import { ChangeEvent } from "react";
+
 export type ConsumerFunction<T> = (param: T) => void;
-export interface ProductsList {
+export type ChangePage = (_: ChangeEvent<unknown>, value: number) => void;
+export interface MultipleProductDTO {
   page: number;
   per_page: number;
   total: number;
@@ -7,7 +10,7 @@ export interface ProductsList {
   data: Product[];
 }
 
-export interface SingleProduct {
+export interface SingleProductDTO {
   data: Product;
 }
 
