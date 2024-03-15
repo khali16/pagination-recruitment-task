@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import { FunctionComponent, Suspense } from "react";
+import { FunctionComponent, Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { usePageControlContext } from "../../hooks/usePageControlContext";
 import FilterInput from "../FilterInput/FilterInput";
@@ -38,7 +38,16 @@ const ProductsPage: FunctionComponent = () => {
 
 const Refetcher: FunctionComponent<
   Pick<PageControlContextState, "filterId"> & { reset: VoidFunction }
-> = ({ reset }) => {
+> = ({ reset, filterId }) => {
+  const [lastQueryId, setLastQueryId] = useState(filterId);
+
+  useEffect(() => {
+    if (lastQueryId !== filterId) {
+      setLastQueryId(filterId);
+      reset();
+    }
+  }, [filterId, lastQueryId, setLastQueryId, reset]);
+
   return (
     <Box>
       <Button onClick={reset}>Try again</Button>

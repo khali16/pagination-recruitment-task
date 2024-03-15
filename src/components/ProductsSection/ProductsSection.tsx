@@ -42,11 +42,7 @@ const withPropsProvider =
   () => {
     const { filterId, page, searchParams, changePage } =
       usePageControlContext();
-    const { products } = useDebouncedQuery(
-      filterId,
-      page,
-      searchParams.toString()
-    );
+    const { products } = useDebouncedQuery(filterId, page, searchParams);
 
     if (products) {
       return <Component products={products} changePage={changePage} />;

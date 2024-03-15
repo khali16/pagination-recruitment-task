@@ -2,6 +2,11 @@
 
 # Tech: React + TypeScript + Vite
 
+# Plans to improve the project:
+
+- MSW (Mock service worker) to allow dev profile with local mocks
+- Adjust to mobile view
+
 # Template readme
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

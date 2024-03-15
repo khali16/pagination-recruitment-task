@@ -23,8 +23,8 @@ const ProductCard: FunctionComponent<Product> = (props) => {
         <TableCell component="th" scope="row">
           {id}
         </TableCell>
-        <TableCell align="right">{name}</TableCell>
-        <TableCell align="right">{year}</TableCell>
+        <TableCell>{name}</TableCell>
+        <TableCell>{year}</TableCell>
       </TableRow>
       <ProductDetailsModal
         showDetailsModal={showDetailsModal}

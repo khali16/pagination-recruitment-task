@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useDebounce";
 import { MultipleProductDTO, SingleProductDTO } from "../types/models";
 import { PRODUCTS_QUERY_KEY } from "../constants/queryKeys";
+import { processErrorResponse } from "../utils/httpUtils";
 
 interface DebouncedQuery {
   products?: SingleProductDTO | MultipleProductDTO;
@@ -47,17 +48,5 @@ const fetchData = async (
   const response = await fetch(
     `https://reqres.in/api/products?per_page=5&${params}`
   );
-  if (!response.ok) {
-    if (response.status >= 400 && response.status < 500) {
-      throw new Error(
-        "Make sure you provided right params :) Client error: " +
-          response.status
-      );
-    } else if (response.status >= 500 && response.status < 600) {
-      throw new Error("Server error: " + response.status);
-    } else {
-      throw new Error("Unexpected error: " + response.status);
-    }
-  }
-  return response.json();
+  return response.ok ? response.json() : processErrorResponse(response.status);
 };
