@@ -26,7 +26,7 @@ export const PageControlContextProvider: FunctionComponent<
   const page = searchParams.get("page") || "";
 
   const changeFilterId = (value: string) => {
-    setSearchParams(!!parseInt(value) ? { id: value } : {});
+    setSearchParams(parseInt(value) ? { id: value } : {});
   };
 
   const changePage = (_: ChangeEvent<unknown>, value: number) => {

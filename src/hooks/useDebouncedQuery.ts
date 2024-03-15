@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useDebounce";
 import { MultipleProductDTO, SingleProductDTO } from "../types/models";
 import { PRODUCTS_QUERY_KEY } from "../constants/queryKeys";
@@ -8,8 +8,8 @@ interface DebouncedQuery {
   isError: boolean;
   isPending: boolean;
   isRefetching: boolean;
-  error: any;
-  status: any;
+  error: Error | null;
+  status: "error" | "success";
 }
 
 export const useDebouncedQuery = (

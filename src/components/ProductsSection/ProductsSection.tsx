@@ -38,7 +38,7 @@ const ProductsSection: FunctionComponent<Props> = ({
 );
 
 const withPropsProvider =
-  (Comp: FunctionComponent<Props>): FunctionComponent =>
+  (Component: FunctionComponent<Props>): FunctionComponent =>
   () => {
     const { filterId, page, searchParams, changePage } =
       usePageControlContext();
@@ -49,7 +49,7 @@ const withPropsProvider =
     );
 
     if (products) {
-      return <Comp products={products} changePage={changePage} />;
+      return <Component products={products} changePage={changePage} />;
     } else {
       throw new TypeError("Expected products in ProductSection to be defined.");
     }

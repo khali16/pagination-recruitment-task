@@ -10,7 +10,6 @@ import {
 import { FunctionComponent, PropsWithChildren } from "react";
 import { ChangePage, Product } from "../../types/models";
 import ProductCard from "../ProductCard/ProductCard";
-import ProductsPagination from "../ProductsPagination/ProductsPagination";
 
 const Root: FunctionComponent<PropsWithChildren> = ({ children }) => (
   <Table sx={{ minWidth: 650 }} aria-label="products table">

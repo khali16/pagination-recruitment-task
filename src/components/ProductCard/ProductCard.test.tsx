@@ -1,38 +1,28 @@
-import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import Vitest from "vitest";
 import ProductCard from "./ProductCard";
 
+const productMock = {
+  id: 1,
+  name: "Product Name",
+  year: 2022,
+  color: "blue",
+  pantone_value: "test",
+};
+
 describe("ProductCard Component Tests", () => {
-  test("Renders properly", () => {
-    const product = {
-      id: 1,
-      name: "Product Name",
-      year: 2022,
-      color: "blue",
-      pantone_value: "test",
-    };
+  test("renders properly", () => {
+    const { getByText } = render(<ProductCard {...productMock} />);
 
-    const { getByText } = render(<ProductCard {...product} />);
-
-    expect(getByText(product.id.toString())).toBeInTheDocument();
-    expect(getByText(product.name)).toBeInTheDocument();
-    expect(getByText(product.year.toString())).toBeInTheDocument();
+    expect(getByText(productMock.id.toString())).toBeInTheDocument();
+    expect(getByText(productMock.name)).toBeInTheDocument();
+    expect(getByText(productMock.year.toString())).toBeInTheDocument();
   });
 
-  test("Toggles modal when clicked", () => {
-    const product = {
-      id: 1,
-      name: "Product Name",
-      year: 2022,
-      color: "blue",
-      pantone_value: "test",
-    };
-
-    const { getByText, queryByTestId, getByRole } = render(
-      <ProductCard {...product} />
+  test("toggles modal when clicked", () => {
+    const { getByText, queryByTestId } = render(
+      <ProductCard {...productMock} />
     );
-    fireEvent.click(getByText(product.id.toString()));
+    fireEvent.click(getByText(productMock.id.toString()));
 
     expect(queryByTestId("product-details-modal")).toBeInTheDocument();
   });

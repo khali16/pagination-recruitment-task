@@ -1,19 +1,21 @@
 import { render, fireEvent } from "@testing-library/react";
 import ProductDetailsModal from "./ProductDetailsModal";
 
-describe("ProductDetailsModal Component Tests", () => {
-  it("Renders properly when modal is shown", () => {
-    const product = {
-      id: 1,
-      name: "Product Name",
-      year: 2022,
-      pantone_value: "PV-123",
-      color: "blue",
-      showDetailsModal: true,
-      toggleDetailsModal: vi.fn(),
-    };
+const propsMock = {
+  id: 1,
+  name: "Product Name",
+  year: 2022,
+  pantone_value: "PV-123",
+  color: "blue",
+  showDetailsModal: true,
+  toggleDetailsModal: vi.fn(),
+};
 
-    const { getByText } = render(<ProductDetailsModal {...product} />);
+const disabledModalProps = { ...propsMock, showDetailsModal: false };
+
+describe("ProductDetailsModal Component Tests", () => {
+  it("renders properly when modal is shown", () => {
+    const { getByText } = render(<ProductDetailsModal {...propsMock} />);
 
     expect(getByText("Product details")).toBeInTheDocument();
     expect(getByText("Product Name")).toBeInTheDocument();
@@ -22,37 +24,19 @@ describe("ProductDetailsModal Component Tests", () => {
     expect(getByText("blue")).toBeInTheDocument();
   });
 
-  it("Does not render when modal is hidden", () => {
-    const product = {
-      id: 1,
-      name: "Product Name",
-      year: 2022,
-      pantone_value: "PV-123",
-      color: "blue",
-      showDetailsModal: false,
-      toggleDetailsModal: vi.fn(),
-    };
-
-    const { queryByTestId } = render(<ProductDetailsModal {...product} />);
+  it("does not render when modal is hidden", () => {
+    const { queryByTestId } = render(
+      <ProductDetailsModal {...disabledModalProps} />
+    );
 
     expect(queryByTestId("product-details-modal")).toBeNull();
   });
 
-  it("Toggles modal when closed", () => {
-    const product = {
-      id: 1,
-      name: "Product Name",
-      year: 2022,
-      pantone_value: "PV-123",
-      color: "blue",
-      showDetailsModal: true,
-      toggleDetailsModal: vi.fn(),
-    };
-
-    const { getByText } = render(<ProductDetailsModal {...product} />);
+  it("toggles modal when closed", () => {
+    const { getByText } = render(<ProductDetailsModal {...propsMock} />);
     fireEvent.click(getByText("X"));
 
-    expect(product.toggleDetailsModal).toHaveBeenCalled();
+    expect(propsMock.toggleDetailsModal).toHaveBeenCalled();
   });
 });
 
